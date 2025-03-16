@@ -1,0 +1,2 @@
+#define SynAnalizer_VERSION_MAJOR @SynAnalizer_VERSION_MAJOR@
+#define SynAnalizer_VERSION_MINOR @SynAnalizer_VERSION_MINOR@
