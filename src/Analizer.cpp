@@ -52,9 +52,33 @@ class SyntaxAnalyzer<LR0> {
 
         void process() {
             
-            
-            std::cout << std::endl;
+            while (!buffer.empty()) {
+                
+                if (canReduce()) {
+                    reduce();
+                }
+                else {
+                    shift();
+                }
+            }
+
+            printBuffer(buffer);            
+            printStack(stack);
+
+            std::cout << "FINISHED" << std::endl;
         }
+
+        void shift() {
+            stack.push_back(buffer.front());
+            buffer.pop();
+        }
+
+        void reduce() {}
+
+        int canReduce() {
+            return 0;
+        }
+
 
         ~SyntaxAnalyzer() {
             while (!buffer.empty()) {

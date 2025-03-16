@@ -10,6 +10,8 @@ enum LexerOutputs {
     MINUS,
     DIV,
     MUL,
+    LPAR,
+    RPAR,
     NUMBER,
     VAR
 }; 

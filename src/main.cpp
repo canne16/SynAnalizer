@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
     SyntaxAnalyzer<LR0> lr0Analyzer;
 
     lr0Analyzer.parse(lexer);
-    
+    lr0Analyzer.process();
 
 
     return 0;
