@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 
     SyntaxAnalyzer<LR0> lr0Analyzer;
 
-    lr0Analyzer.parse(lexer);
+    lr0Analyzer.parse(lexer, &std::cin);
     lr0Analyzer.process();  
 
     delete lexer;

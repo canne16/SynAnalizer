@@ -4,9 +4,9 @@
 
 SyntaxAnalyzer<LR0>::SyntaxAnalyzer() : idCounter(0) {}
 
-std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer) {
+std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer, std::istream* in_stream) {
     std::cout << "Parsing using LR(0) algorithm.\n";
-    int lex_out = lexer->yylex();
+    int lex_out = lexer->yylex(in_stream);
     while (lex_out != 0)
     {
         switch (lex_out)
@@ -26,7 +26,7 @@ std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer) {
         default:
             break;
         }
-        lex_out = lexer->yylex();
+        lex_out = lexer->yylex(in_stream);
     }
 
     return buffer;

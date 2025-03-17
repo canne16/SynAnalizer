@@ -23,7 +23,7 @@ private:
 public:
     SyntaxAnalyzer(); 
 
-    std::queue<GrammarElement*> parse(FlexLexer* lexer);
+    std::queue<GrammarElement*> parse(FlexLexer* lexer, std::istream* in_stream);
     std::vector<GrammarElement*> process();
     void shift();
     void reduce(ReductionCode code);
