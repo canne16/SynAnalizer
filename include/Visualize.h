@@ -9,7 +9,7 @@
 #include "Grammar.h"
 
 const int STACK_WIDTH = 20;  
-const int BUFFER_WIDTH = 20; 
+const int BUFFER_WIDTH = 40; 
 const int ACTION_WIDTH = 17; 
 
 void printStack(std::vector<GrammarElement*> stack);

@@ -4,12 +4,11 @@
 
 SyntaxAnalyzer<LR0>::SyntaxAnalyzer() : idCounter(0) {}
 
-std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer, std::istream* in_stream) {
+std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer) {
     std::cout << "Parsing using LR(0) algorithm.\n";
-    int lex_out = lexer->yylex(in_stream);
+    int lex_out = lexer->yylex();
     while (lex_out != 0)
     {
-        
         switch (lex_out)
         {
             case PLUS:
@@ -27,7 +26,7 @@ std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer, std::is
         default:
             break;
         }
-        lex_out = lexer->yylex(in_stream);
+        lex_out = lexer->yylex();
     }
 
     return buffer;
@@ -41,22 +40,15 @@ std::vector<GrammarElement*> SyntaxAnalyzer<LR0>::process() {
         ReductionCode code = canReduce();
         while(code != INV) {
             reduce(code);
-            // std::cout << actions.back() << "\n";
-            // printStack(stack);
             code = canReduce();
-            // printRow(stack, buffer, actions.back());
         }
         
         shift();
-        // printRow(stack, buffer, actions.back());
-        // std::cout << actions.back() << "\n";
     }
 
     ReductionCode code = canReduce();
     while(code != INV) {
         reduce(code);
-        // std::cout << actions.back() << "\n";
-        // printStack(stack);
         code = canReduce();
     }
     
@@ -71,8 +63,6 @@ void SyntaxAnalyzer<LR0>::shift() {
     printRow(stack, buffer, actions.back());
     stack.push_back(buffer.front());
     buffer.pop();
-    // printBuffer(buffer);            
-    // printStack(stack);
 }
 
 void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
