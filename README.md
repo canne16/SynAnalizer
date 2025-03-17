@@ -1,7 +1,7 @@
 
 # SynAnalyzer
 
-**SynAnalyzer** is a simple syntax analysis tool built using C++ and Flex. It includes features for parsing and analyzing input data using a lexer and an LR(0) parser, and supports testing via Google Test. It is designed for primitive language, which grammar is following:
+**SynAnalyzer** is a simple **shift-reduce** syntax analysis tool built using C++ and Flex. It includes features for parsing and analyzing input data using a lexer, and supports testing via Google Test. It is designed for primitive language, which grammar is following:
 
 ## Grammar
 
