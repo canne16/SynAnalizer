@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
 project(SynAnalyzer VERSION 1.0)
 
@@ -33,7 +33,7 @@ include(FetchContent)
 FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG release-1.12.0  # or whatever version you want
+    GIT_TAG v1.16.0  # Specific version 1.16.0
 )
 FetchContent_MakeAvailable(googletest)
 
@@ -44,6 +44,9 @@ add_executable(runTests
                         ${SRC_DIR}/Visualize.cpp
                         ${FLEX_FlexTokenizer_OUTPUTS}
               )
+
+target_compile_definitions(runTests PRIVATE TESTING)
+
 
 target_include_directories(runTests PUBLIC
                           ${INCLUDE_DIR}

@@ -1,6 +1,5 @@
 #include <FlexLexer.h>
 
-
 #include "Analyzer.h"
 #include "Config.h"
 

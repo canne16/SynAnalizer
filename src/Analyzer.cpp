@@ -5,7 +5,11 @@
 SyntaxAnalyzer<LR0>::SyntaxAnalyzer() : idCounter(0) {}
 
 std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer) {
+
+    #ifndef TESTING
     std::cout << "Parsing using LR(0) algorithm.\n";
+    #endif
+    
     int lex_out = lexer->yylex();
     while (lex_out != 0)
     {
@@ -33,7 +37,10 @@ std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer) {
 }
 
 std::vector<GrammarElement*> SyntaxAnalyzer<LR0>::process() {
+    
+    #ifndef TESTING
     table_prompt();
+    #endif
 
     while (!buffer.empty()) {
 
@@ -52,15 +59,23 @@ std::vector<GrammarElement*> SyntaxAnalyzer<LR0>::process() {
         code = canReduce();
     }
     
-    actions.push_back("Accept");
+    if ((stack.size() == 1) && (dynamic_cast<Expression*>(stack[0]) != nullptr))
+        actions.push_back("Accept");
+    else
+        actions.push_back("Error");
+
+    #ifndef TESTING
     printRow(stack, buffer, actions.back());
+    #endif
 
     return stack;
 }
 
 void SyntaxAnalyzer<LR0>::shift() {
     actions.push_back("Shift");
+    #ifndef TESTING
     printRow(stack, buffer, actions.back());
+    #endif
     stack.push_back(buffer.front());
     buffer.pop();
 }
@@ -70,7 +85,9 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
     {
         case ID_F:
             actions.push_back("Reduce F -> id");
+            #ifndef TESTING
             printRow(stack, buffer, actions.back());
+            #endif
             delete stack.back();
             stack.pop_back();
             stack.push_back(new Factor());
@@ -78,7 +95,9 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
         
         case lEl_F:
             actions.push_back("Reduce F -> (E)");
+            #ifndef TESTING
             printRow(stack, buffer, actions.back());
+            #endif
             delete stack.back();
             stack.pop_back();
             delete stack.back();
@@ -90,7 +109,9 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
 
         case F_T:
             actions.push_back("Reduce T -> F");
+            #ifndef TESTING
             printRow(stack, buffer, actions.back());
+            #endif
             delete stack.back();
             stack.pop_back();
             stack.push_back(new Term());
@@ -101,7 +122,9 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
                 actions.push_back("Reduce T -> T*F");
             else
                 actions.push_back("Reduce T -> T/F");
+            #ifndef TESTING
             printRow(stack, buffer, actions.back());
+            #endif
             
             delete stack.back();
             stack.pop_back();
@@ -114,7 +137,9 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
 
         case T_E:
             actions.push_back("Reduce E -> T");
+            #ifndef TESTING
             printRow(stack, buffer, actions.back());
+            #endif
             delete stack.back();
             stack.pop_back();
             stack.push_back(new Expression());
@@ -125,7 +150,9 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
                 actions.push_back("Reduce E -> E+T");
             else
                 actions.push_back("Reduce E -> E-T");
+            #ifndef TESTING
             printRow(stack, buffer, actions.back());
+            #endif
 
             delete stack.back();
             stack.pop_back();
