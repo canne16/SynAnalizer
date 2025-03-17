@@ -59,19 +59,19 @@
 SynAnalyzer/
 ├── CMakeLists.txt            # CMake configuration file
 ├── include/                  # Header files
-│   ├── Analyzer.h            # Main analyzer class
-│   ├── Codes.h               # Main analyzer class
-│   ├── Grammar.h             # Main analyzer class
-│   └── Visualize.h           # Main analyzer class
+│   ├── Analyzer.h            # Syntax analyzer class
+│   ├── Codes.h               # Return code definitions
+│   ├── Grammar.h             # Grammar structure classes
+│   └── Visualize.h           # Visualization utilities
 ├── src/                      # Source files
-│   ├── main.cpp              # Main application entry
-│   ├── lexer.cpp             # Flex lexer specification
+│   ├── main.cpp              # Main application entry point
+│   ├── lexer.l               # Flex lexer specification
 │   ├── Analyzer.cpp          # Implementation of the analyzer
-│   └── Visualize.cpp         # Visualization logic
+│   └── Visualize.cpp         # Visualization functions
 ├── tests/                    # Unit tests
 │   ├── test_main.cpp         # Test entry point
 │   └── test_SynAnalyzer.cpp  # SynAnalyzer test cases
-├── Config.h.in               # CMake configuration file
+├── Config.h.in               # Template for configuration header file
 │
 └── README.md                 # This file
 ```
