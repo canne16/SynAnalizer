@@ -59,22 +59,26 @@ class SyntaxAnalyzer<LR0> {
                 ReductionCode code = canReduce();
                 while(code != INV) {
                     reduce(code);
+                    std::cout << actions.back() << "\n";
+                    printStack(stack);
                     code = canReduce();
                 }
-
+                
                 shift();
-
+                std::cout << actions.back() << "\n";
             }
 
             ReductionCode code = canReduce();
             while(code != INV) {
                 reduce(code);
+                std::cout << actions.back() << "\n";
+                printStack(stack);
                 code = canReduce();
             }
             
             printStack(stack);
 
-            std::cout << "FINISHED" << std::endl;
+            std::cout << "ACCEPT" << std::endl;
         }
 
         void shift() {
@@ -114,11 +118,13 @@ class SyntaxAnalyzer<LR0> {
                     break;
 
                 case TF_T:
-                    if (dynamic_cast<Operator*>(stack.back())->value == "*")
+                    if (dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "*")
                         actions.push_back("Reduce T -> T*F");
                     else
                         actions.push_back("Reduce T -> T/F");
                     
+                    delete stack.back();
+                    stack.pop_back();
                     delete stack.back();
                     stack.pop_back();
                     delete stack.back();
@@ -134,11 +140,13 @@ class SyntaxAnalyzer<LR0> {
                     break;
 
                 case ET_E:
-                    if (dynamic_cast<Operator*>(stack.back())->value == "+")
+                    if (dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "+")
                         actions.push_back("Reduce E -> E+T");
                     else
                         actions.push_back("Reduce E -> E-T");
 
+                    delete stack.back();
+                    stack.pop_back();
                     delete stack.back();
                     stack.pop_back();
                     delete stack.back();
@@ -161,8 +169,10 @@ class SyntaxAnalyzer<LR0> {
 
             if (
                 stack.size() >= 3 &&
-                dynamic_cast<Operator*>(stack[stack.size() - 1]) != nullptr &&
                 dynamic_cast<Operator*>(stack[stack.size() - 3]) != nullptr &&
+                dynamic_cast<Operator*>(stack[stack.size() - 3])->value == "(" &&
+                dynamic_cast<Operator*>(stack[stack.size() - 1]) != nullptr &&
+                dynamic_cast<Operator*>(stack[stack.size() - 1])->value == ")" &&
                 dynamic_cast<Expression*>(stack[stack.size() - 2]) != nullptr
             )   return lEl_F;
             
@@ -180,17 +190,30 @@ class SyntaxAnalyzer<LR0> {
             )   return F_T;
 
             if (
-                stack.size() >= 3 &&
-                dynamic_cast<Expression*>(stack[stack.size() - 3]) != nullptr &&
-                dynamic_cast<Operator*>(stack[stack.size() - 2]) != nullptr &&
-                (dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "+" || 
-                 dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "-") &&
-                dynamic_cast<Term*>(stack[stack.size() - 1]) != nullptr
-            )   return ET_E;
-            
-            if (
-                dynamic_cast<Term*>(stack[stack.size() - 1]) != nullptr
-            )   return T_E;
+                (
+                    dynamic_cast<Term*>(stack[stack.size() - 1]) != nullptr &&
+                    !buffer.empty() &&
+                    dynamic_cast<Operator*>(buffer.front()) != nullptr && 
+                    (dynamic_cast<Operator*>(buffer.front())->value == "+" || 
+                     dynamic_cast<Operator*>(buffer.front())->value == "-" || 
+                     dynamic_cast<Operator*>(buffer.front())->value == ")")
+                ) || 
+                (
+                    dynamic_cast<Term*>(stack[stack.size() - 1]) != nullptr &&
+                    buffer.empty()
+                )       
+            ) {
+                if (
+                    stack.size() >= 3 &&
+                    dynamic_cast<Expression*>(stack[stack.size() - 3]) != nullptr &&
+                    dynamic_cast<Operator*>(stack[stack.size() - 2]) != nullptr &&
+                    (dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "+" || 
+                    dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "-")
+                ) return ET_E;
+                
+                else
+                    return T_E;
+            }   
 
             return INV;
         }

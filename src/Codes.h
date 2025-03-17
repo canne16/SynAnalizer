@@ -23,5 +23,5 @@ enum ReductionCode {
     ET_E,
     T_E,
     TF_T,
-    F_T
+    F_T,
 };
