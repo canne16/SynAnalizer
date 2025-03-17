@@ -3,11 +3,13 @@
 
 **SynAnalyzer** is a simple **shift-reduce** syntax analysis tool built using C++ and Flex. It includes features for parsing and analyzing input data using a lexer, and supports testing via Google Test. It is designed for primitive language, which grammar is following:
 
-## Grammar
+## LR Grammar
 
 $$ E \Rightarrow E+T | E-T | T $$
 $$ T \Rightarrow T\cdot F | T/F | F $$
 $$ F \Rightarrow (E) | id $$
+
+The language consists of addition, subtraction, multiplication, division, and parentheses. Operations can be performed on variables or numbers. **Only x, y, and z can be used as variables.**
 
 ## Requirements
 
@@ -97,6 +99,8 @@ The project includes tests using the Google Test framework. To run the tests:
 ## Example Usage
 
 ### Running the Syntax Analyzer
+
+**Important**: only x, y, and z can be used as variables. Parsing is ended with symbol **$**. Each input therefore should end with **$**.
 
 To analyze an input string using the `SynAnalyzer` executable:
 
