@@ -27,18 +27,18 @@ number  {dig}|{num}
 
 %%
 
-"+"         {cout << "operation " << YYText() << endl; return PLUS;}
-"-"         {cout << "operation " << YYText() << endl; return MINUS;}
-"*"         {cout << "operation " << YYText() << endl; return MUL;}
-"/"         {cout << "operation " << YYText() << endl; return DIV;}
-"("         {cout << "operation " << YYText() << endl; return LPAR;}
-")"         {cout << "operation " << YYText() << endl; return RPAR;}
-"$"         {cout << "quitting..." << endl; return 0;}
+"+"         {return PLUS;}
+"-"         {return MINUS;}
+"*"         {return MUL;}
+"/"         {return DIV;}
+"("         {return LPAR;}
+")"         {return RPAR;}
+"$"         {return 0;}
 
 {ws}    
 
-{number}    {cout << "number " << YYText() << '\n'; return NUMBER;}
+{number}    {return NUMBER;}
 
-{var}       {cout << "variable " << YYText() << '\n'; return VAR;}
+{var}       {return VAR;}
 
 %%

@@ -23,7 +23,7 @@ public:
 
     void display() const override {
         
-        std::cout << value << " ";
+        std::cout << value; // << " ";
     }
 };
 
@@ -37,7 +37,7 @@ public:
     Id(int id, const std::string& val) : index(id), value(val) {type="id";}
 
     void display() const override {
-        std::cout << "ID" << index << " "; // << "[" << value << "]";
+        std::cout << "id" << index; // << " "; // << "[" << value << "]";
     }
 };
 
@@ -47,7 +47,7 @@ public:
     std::string type;
     Expression() {type="expression";}
     void display() const override {
-        std::cout << "E ";
+        std::cout << "E";
     }
 };
 
@@ -57,7 +57,7 @@ public:
     std::string type;
     Term() {type="term";}
     void display() const override {
-        std::cout << "T ";
+        std::cout << "T";
     }
 };
 
@@ -67,6 +67,6 @@ public:
     std::string type;
     Factor() {type="factor";}
     void display() const override {
-        std::cout << "F ";
+        std::cout << "F";
     }
 };

@@ -48,45 +48,50 @@ class SyntaxAnalyzer<LR0> {
                 lex_out = lexer->yylex();
             }
 
-            printBuffer(buffer);
+            // printBuffer(buffer);
             
         }
 
         void process() {
-            
+
+            table_prompt();
+
             while (!buffer.empty()) {
-                
+
                 ReductionCode code = canReduce();
                 while(code != INV) {
                     reduce(code);
-                    std::cout << actions.back() << "\n";
-                    printStack(stack);
+                    // std::cout << actions.back() << "\n";
+                    // printStack(stack);
                     code = canReduce();
+                    // printRow(stack, buffer, actions.back());
                 }
                 
                 shift();
-                std::cout << actions.back() << "\n";
+                // printRow(stack, buffer, actions.back());
+                // std::cout << actions.back() << "\n";
             }
 
             ReductionCode code = canReduce();
             while(code != INV) {
                 reduce(code);
-                std::cout << actions.back() << "\n";
-                printStack(stack);
+                // std::cout << actions.back() << "\n";
+                // printStack(stack);
                 code = canReduce();
             }
             
-            printStack(stack);
+            actions.push_back("Accept");
+            printRow(stack, buffer, actions.back());
 
-            std::cout << "ACCEPT" << std::endl;
         }
 
         void shift() {
+            actions.push_back("Shift");
+            printRow(stack, buffer, actions.back());
             stack.push_back(buffer.front());
             buffer.pop();
-            actions.push_back("Shift");
-            printBuffer(buffer);            
-            printStack(stack);
+            // printBuffer(buffer);            
+            // printStack(stack);
         }
 
         void reduce(ReductionCode code) {
@@ -94,6 +99,7 @@ class SyntaxAnalyzer<LR0> {
             {
                 case ID_F:
                     actions.push_back("Reduce F -> id");
+                    printRow(stack, buffer, actions.back());
                     delete stack.back();
                     stack.pop_back();
                     stack.push_back(new Factor());
@@ -101,6 +107,7 @@ class SyntaxAnalyzer<LR0> {
                 
                 case lEl_F:
                     actions.push_back("Reduce F -> (E)");
+                    printRow(stack, buffer, actions.back());
                     delete stack.back();
                     stack.pop_back();
                     delete stack.back();
@@ -112,6 +119,7 @@ class SyntaxAnalyzer<LR0> {
 
                 case F_T:
                     actions.push_back("Reduce T -> F");
+                    printRow(stack, buffer, actions.back());
                     delete stack.back();
                     stack.pop_back();
                     stack.push_back(new Term());
@@ -122,6 +130,7 @@ class SyntaxAnalyzer<LR0> {
                         actions.push_back("Reduce T -> T*F");
                     else
                         actions.push_back("Reduce T -> T/F");
+                    printRow(stack, buffer, actions.back());
                     
                     delete stack.back();
                     stack.pop_back();
@@ -134,6 +143,7 @@ class SyntaxAnalyzer<LR0> {
 
                 case T_E:
                     actions.push_back("Reduce E -> T");
+                    printRow(stack, buffer, actions.back());
                     delete stack.back();
                     stack.pop_back();
                     stack.push_back(new Expression());
@@ -144,6 +154,7 @@ class SyntaxAnalyzer<LR0> {
                         actions.push_back("Reduce E -> E+T");
                     else
                         actions.push_back("Reduce E -> E-T");
+                    printRow(stack, buffer, actions.back());
 
                     delete stack.back();
                     stack.pop_back();
