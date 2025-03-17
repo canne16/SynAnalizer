@@ -5,7 +5,7 @@ enum Grammar {
     NONE
 } ;
 
-enum LexerOutputs {
+enum LexerOutput {
     PLUS = 5,
     MINUS,
     DIV,
@@ -16,3 +16,12 @@ enum LexerOutputs {
     VAR
 }; 
 
+enum ReductionCode {
+    INV = 0,
+    ID_F,
+    lEl_F,
+    ET_E,
+    T_E,
+    TF_T,
+    F_T
+};

@@ -31,8 +31,8 @@ number  {dig}|{num}
 "-"         {cout << "operation " << YYText() << endl; return MINUS;}
 "*"         {cout << "operation " << YYText() << endl; return MUL;}
 "/"         {cout << "operation " << YYText() << endl; return DIV;}
-"("         {cout << "case " << YYText() << endl; return LPAR;}
-")"         {cout << "case " << YYText() << endl; return RPAR;}
+"("         {cout << "operation " << YYText() << endl; return LPAR;}
+")"         {cout << "operation " << YYText() << endl; return RPAR;}
 "$"         {cout << "quitting..." << endl; return 0;}
 
 {ws}    

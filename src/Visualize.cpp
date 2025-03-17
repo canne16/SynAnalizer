@@ -10,7 +10,6 @@ void printStack(std::vector<GrammarElement*> stack) {
 
     for (auto it = stack.rend() - 1; it != stack.rbegin() - 1; --it) {
         (*it)->display();
-        // std::cout << std::endl;
     }
 
     std::cout << std::endl;

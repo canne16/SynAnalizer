@@ -15,14 +15,15 @@ public:
 
 class Operator : public GrammarElement {
 private:
-    std::string symbol;
-
 public:
-    Operator(const std::string& sym) : symbol(sym) {}
+
+    std::string value;
+    std::string type;
+    Operator(const std::string& val) : value(val) {type="operator";}
 
     void display() const override {
         
-        std::cout << symbol;
+        std::cout << value << " ";
     }
 };
 
@@ -32,30 +33,40 @@ private:
     std::string value;
 
 public:
-    Id(int id, const std::string& val) : index(id), value(val) {}
+    std::string type;
+    Id(int id, const std::string& val) : index(id), value(val) {type="id";}
 
     void display() const override {
-        std::cout << "ID" << index << "[" << value << "]";
+        std::cout << "ID" << index << " "; // << "[" << value << "]";
     }
 };
 
 class Expression : public GrammarElement {
+private:
 public:
+    std::string type;
+    Expression() {type="expression";}
     void display() const override {
-        std::cout << "E";
+        std::cout << "E ";
     }
 };
 
 class Term : public GrammarElement {
+private:
 public:
+    std::string type;
+    Term() {type="term";}
     void display() const override {
-        std::cout << "T";
+        std::cout << "T ";
     }
 };
 
 class Factor : public GrammarElement {
+private:
 public:
+    std::string type;
+    Factor() {type="factor";}
     void display() const override {
-        std::cout << "F";
+        std::cout << "F ";
     }
 };
