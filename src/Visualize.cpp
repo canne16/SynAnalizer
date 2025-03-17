@@ -1,16 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <iomanip>
-#include <sstream>
-
-#include "Grammar.h"
-
-
-const int STACK_WIDTH = 20;  
-const int BUFFER_WIDTH = 20; 
-const int ACTION_WIDTH = 17; 
-
+#include "Visualize.h"
 
 void printStack(std::vector<GrammarElement*> stack) {
     // std::cout << "Stack:" << std::endl << "$";
@@ -76,5 +64,4 @@ void table_prompt() {
               << std::setw(BUFFER_WIDTH) << "BUFFER"
               << std::setw(ACTION_WIDTH) << "ACTION"
               << std::endl;
-
 }

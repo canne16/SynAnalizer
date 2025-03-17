@@ -1,3 +1,5 @@
+#pragma once
+
 enum Grammar {
     LR0 , // implement only LR0 for syntax ana lyzer
     LR1 ,

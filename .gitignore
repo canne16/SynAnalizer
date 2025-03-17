@@ -1,2 +1,40 @@
-/build/*
-/.vscode/
+# Ignore build directories
+/build/
+/bin/
+/lib/
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/CTestTestfile.cmake
+/Makefile
+
+# Ignore generated config files
+Config.h
+
+# Ignore VSCode settings (optional)
+.vscode/
+
+# Ignore compiled object files
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.a
+*.lib
+
+# Ignore executables
+*.exe
+*.out
+*.app
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.swp
+*~
+
+# Ignore test-related build artifacts
+test/*.o
+test/*.exe
+test/*.out
