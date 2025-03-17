@@ -9,14 +9,15 @@ std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer, std::is
     int lex_out = lexer->yylex(in_stream);
     while (lex_out != 0)
     {
+        
         switch (lex_out)
         {
-        case PLUS:
-        case MINUS:
-        case DIV:
-        case MUL:
-        case LPAR:
-        case RPAR:
+            case PLUS:
+            case MINUS:
+            case DIV:
+            case MUL:
+            case LPAR:
+            case RPAR:
             buffer.push(new Operator(lexer->YYText()));
             break;
         case NUMBER:

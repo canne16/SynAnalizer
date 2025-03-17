@@ -1,4 +1,6 @@
 #include <FlexLexer.h>
+#include <fstream>
+
 
 #include "Analyzer.h"
 #include "Config.h"
