@@ -6,7 +6,7 @@
 ## Grammar
 
 $$ E \Rightarrow E+T | E-T | T $$
-$$ T \Rightarrow T\cdotF | T/F | F $$
+$$ T \Rightarrow T\cdot F | T/F | F $$
 $$ F \Rightarrow (E) | id $$
 
 ## Requirements
