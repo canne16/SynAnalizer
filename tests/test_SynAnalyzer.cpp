@@ -39,7 +39,7 @@ TEST(AnalyzerTest, ReadFromFile) {
     std::vector<GrammarElement> stack_out = analyzer.process();
 
     EXPECT_TRUE(
-        stack_out.size() == 1 && stack_out[0].type == ElementType::EXPRESSION
+        stack_out.size() == 1 && stack_out[0].getType() == ElementType::EXPRESSION
     );
 
     inputFile.close();
@@ -62,7 +62,7 @@ TEST_P(AnalyzerTest, Processer) {
 
     std::vector<GrammarElement> stack_out = analyzer.process();
 
-    EXPECT_EQ((stack_out.size() == 1) && (stack_out[0].type == ElementType::EXPRESSION), expected);
+    EXPECT_EQ((stack_out.size() == 1) && (stack_out[0].getType() == ElementType::EXPRESSION), expected);
 
     delete lexer;
 }

@@ -6,11 +6,12 @@
 
 
 class GrammarElement {
-public:
 
+private:
     ElementType type;
     std::string value;
     int index;
+public:
 
     GrammarElement(ElementType t, const std::string& val = "", int id = -1) : type(t), value(val), index(id) {}
     
@@ -27,6 +28,11 @@ public:
             std::cout << "F";
         }
     }
+
+    ElementType getType()  const { return type; }
+    std::string getValue() const { return value; }
+    int         getIndex() const { return index; }
+
 
     virtual ~GrammarElement() = default;
 };

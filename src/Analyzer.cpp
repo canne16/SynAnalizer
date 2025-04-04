@@ -59,7 +59,7 @@ std::vector<GrammarElement> SyntaxAnalyzer<LR0>::process() {
         code = canReduce();
     }
     
-    if ((stack.size() == 1) && (stack[0].type != ElementType::EXPRESSION))
+    if ((stack.size() == 1) && (stack[0].getType() == ElementType::EXPRESSION))
         actions.push_back("Accept");
     else
         actions.push_back("Error");
@@ -113,8 +113,8 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
             break;
 
         case TF_T:
-            if ((stack[stack.size() - 2].type == ElementType::OPERATOR) && 
-                (stack[stack.size() - 2].value == "*"))
+            if ((stack[stack.size() - 2].getType() == ElementType::OPERATOR) && 
+                (stack[stack.size() - 2].getValue() == "*"))
                 actions.push_back("Reduce T -> T*F");
             else
                 actions.push_back("Reduce T -> T/F");
@@ -138,8 +138,8 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
             break;
 
         case ET_E:
-            if ((stack[stack.size() - 2].type == ElementType::OPERATOR) && 
-                (stack[stack.size() - 2].value == "+"))
+            if ((stack[stack.size() - 2].getType() == ElementType::OPERATOR) && 
+                (stack[stack.size() - 2].getValue() == "+"))
                 actions.push_back("Reduce E -> E+T");
             else
                 actions.push_back("Reduce E -> E-T");
@@ -163,46 +163,46 @@ ReductionCode SyntaxAnalyzer<LR0>::canReduce() {
     if (stack.empty())
         return INV;
 
-    if (stack.back().type == ElementType::ID)
+    if (stack.back().getType() == ElementType::ID)
         return ID_F;
 
     if (
         stack.size() >= 3 &&
-        stack[stack.size() - 3].type == ElementType::OPERATOR &&
-        stack[stack.size() - 3].value == "(" &&
-        stack[stack.size() - 1].type == ElementType::OPERATOR &&
-        stack[stack.size() - 1].value == ")" &&
-        stack[stack.size() - 2].type == ElementType::EXPRESSION
+        stack[stack.size() - 3].getType() == ElementType::OPERATOR &&
+        stack[stack.size() - 3].getValue() == "(" &&
+        stack[stack.size() - 1].getType() == ElementType::OPERATOR &&
+        stack[stack.size() - 1].getValue() == ")" &&
+        stack[stack.size() - 2].getType() == ElementType::EXPRESSION
     )   return lEl_F;
     
     if (
         stack.size() >= 3 &&
-        stack[stack.size() - 3].type == ElementType::TERM &&
-        stack[stack.size() - 2].type == ElementType::OPERATOR &&
-        (stack[stack.size() - 2].value == "*" || stack[stack.size() - 2].value == "/") &&
-         stack[stack.size() - 1].type == ElementType::FACTOR
+        stack[stack.size() - 3].getType() == ElementType::TERM &&
+        stack[stack.size() - 2].getType() == ElementType::OPERATOR &&
+        (stack[stack.size() - 2].getValue() == "*" || stack[stack.size() - 2].getValue() == "/") &&
+         stack[stack.size() - 1].getType() == ElementType::FACTOR
     )   return TF_T;
     
     if (
-        stack[stack.size() - 1].type == ElementType::FACTOR
+        stack[stack.size() - 1].getType() == ElementType::FACTOR
     )   return F_T;
 
     if (
         (
-            stack[stack.size() - 1].type == ElementType::TERM &&
+            stack[stack.size() - 1].getType() == ElementType::TERM &&
             !buffer.empty() &&
-            buffer.front().type == ElementType::OPERATOR && 
-            (buffer.front().value == "+" || buffer.front().value == "-" || buffer.front().value == ")")
+            buffer.front().getType() == ElementType::OPERATOR && 
+            (buffer.front().getValue() == "+" || buffer.front().getValue() == "-" || buffer.front().getValue() == ")")
         ) || 
         (
-            stack[stack.size() - 1].type == ElementType::TERM && buffer.empty()
+            stack[stack.size() - 1].getType() == ElementType::TERM && buffer.empty()
         )       
     ) {
         if (
             stack.size() >= 3 &&
-            stack[stack.size() - 3].type == ElementType::EXPRESSION &&
-            stack[stack.size() - 2].type == ElementType::OPERATOR &&
-            (stack[stack.size() - 2].value == "+" || stack[stack.size() - 2].value == "-")
+            stack[stack.size() - 3].getType() == ElementType::EXPRESSION &&
+            stack[stack.size() - 2].getType() == ElementType::OPERATOR &&
+            (stack[stack.size() - 2].getValue() == "+" || stack[stack.size() - 2].getValue() == "-")
         ) return ET_E;
         
         else
