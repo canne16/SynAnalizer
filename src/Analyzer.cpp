@@ -184,29 +184,25 @@ ReductionCode SyntaxAnalyzer<LR0>::canReduce() {
     )   return TF_T;
     
     if (
-        dynamic_cast<Factor*>(stack[stack.size() - 1]) != nullptr
+        stack[stack.size() - 1].type == ElementType::FACTOR
     )   return F_T;
 
     if (
         (
-            dynamic_cast<Term*>(stack[stack.size() - 1]) != nullptr &&
+            stack[stack.size() - 1].type == ElementType::TERM &&
             !buffer.empty() &&
-            dynamic_cast<Operator*>(buffer.front()) != nullptr && 
-            (dynamic_cast<Operator*>(buffer.front())->value == "+" || 
-                dynamic_cast<Operator*>(buffer.front())->value == "-" || 
-                dynamic_cast<Operator*>(buffer.front())->value == ")")
+            buffer.front().type == ElementType::OPERATOR && 
+            (buffer.front().value == "+" || buffer.front().value == "-" || buffer.front().value == ")")
         ) || 
         (
-            dynamic_cast<Term*>(stack[stack.size() - 1]) != nullptr &&
-            buffer.empty()
+            stack[stack.size() - 1].type == ElementType::TERM && buffer.empty()
         )       
     ) {
         if (
             stack.size() >= 3 &&
-            dynamic_cast<Expression*>(stack[stack.size() - 3]) != nullptr &&
-            dynamic_cast<Operator*>(stack[stack.size() - 2]) != nullptr &&
-            (dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "+" || 
-            dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "-")
+            stack[stack.size() - 3].type == ElementType::EXPRESSION &&
+            stack[stack.size() - 2].type == ElementType::OPERATOR &&
+            (stack[stack.size() - 2].value == "+" || stack[stack.size() - 2].value == "-")
         ) return ET_E;
         
         else
@@ -218,11 +214,7 @@ ReductionCode SyntaxAnalyzer<LR0>::canReduce() {
 
 SyntaxAnalyzer<LR0>::~SyntaxAnalyzer() {
     while (!buffer.empty()) {
-        delete buffer.front();
         buffer.pop();
-    }
-    for (auto ptr : stack) {
-        delete ptr;
     }
     stack.clear(); 
 }

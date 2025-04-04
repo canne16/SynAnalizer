@@ -1,23 +1,23 @@
 #include "Visualize.h"
 
-void printStack(std::vector<GrammarElement*> stack) {
+void printStack(std::vector<GrammarElement> stack) {
     // std::cout << "Stack:" << std::endl << "$";
 
     std::cout << "$ ";
 
     for (auto it = stack.rend() - 1; it != stack.rbegin() - 1; --it) {
-        (*it)->display();
+        (*it).display();
     }
 
     std::cout << "\t|";// std::endl;
 }
 
 
-void printBuffer(std::queue<GrammarElement*> q) {
+void printBuffer(std::queue<GrammarElement> q) {
     // std::cout << "Buffer:" << std::endl;
 
     while (!q.empty()) {
-        q.front()->display(); 
+        q.front().display(); 
         q.pop();
         // std::cout << " ";
     }
@@ -25,15 +25,15 @@ void printBuffer(std::queue<GrammarElement*> q) {
     std::cout << "$\t|"; // << std::endl;
 }
 
-std::string captureDisplayOutput(GrammarElement* element) {
+std::string captureDisplayOutput(GrammarElement element) {
     std::ostringstream buffer;
     std::streambuf* oldCoutBuffer = std::cout.rdbuf(buffer.rdbuf()); // Redirect std::cout
-    element->display(); // Call display() which prints to std::cout
+    element.display(); // Call display() which prints to std::cout
     std::cout.rdbuf(oldCoutBuffer); // Restore original std::cout buffer
     return buffer.str(); // Get captured output
 }
 
-void printRow(std::vector<GrammarElement*> stack, std::queue<GrammarElement*> buffer, std::string action) {
+void printRow(std::vector<GrammarElement> stack, std::queue<GrammarElement> buffer, std::string action) {
     
     std::ostringstream stackStream, bufferStream;
 

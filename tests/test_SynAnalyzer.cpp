@@ -36,10 +36,10 @@ TEST(AnalyzerTest, ReadFromFile) {
     lexer->switch_streams(&inputFile, &std::cout);
     analyzer.parse(lexer);
 
-    std::vector<GrammarElement*> stack_out = analyzer.process();
+    std::vector<GrammarElement> stack_out = analyzer.process();
 
     EXPECT_TRUE(
-        stack_out.size() == 1 && dynamic_cast<Expression*>(stack_out[0]) != nullptr
+        stack_out.size() == 1 && stack_out[0].type == ElementType::EXPRESSION
     );
 
     inputFile.close();
@@ -60,9 +60,9 @@ TEST_P(AnalyzerTest, Processer) {
     lexer->switch_streams(&in_stream, &std::cout);
     analyzer.parse(lexer);
 
-    std::vector<GrammarElement*> stack_out = analyzer.process();
+    std::vector<GrammarElement> stack_out = analyzer.process();
 
-    EXPECT_EQ((stack_out.size() == 1) && (dynamic_cast<Expression*>(stack_out[0]) != nullptr), expected);
+    EXPECT_EQ((stack_out.size() == 1) && (stack_out[0].type == ElementType::EXPRESSION), expected);
 
     delete lexer;
 }
