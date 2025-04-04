@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include "Codes.h"
 
 
 class GrammarElement {
@@ -18,8 +19,8 @@ private:
 public:
 
     std::string value;
-    std::string type;
-    Operator(const std::string& val) : value(val) {type="operator";}
+    ElementType type;
+    Operator(const std::string& val) : value(val) {type=OPERATOR;}
 
     void display() const override {
         
@@ -33,8 +34,8 @@ private:
     std::string value;
 
 public:
-    std::string type;
-    Id(int id, const std::string& val) : index(id), value(val) {type="id";}
+    ElementType type;
+    Id(int id, const std::string& val) : index(id), value(val) {type=ID;}
 
     void display() const override {
         std::cout << "id" << index; // << " "; // << "[" << value << "]";
@@ -44,8 +45,8 @@ public:
 class Expression : public GrammarElement {
 private:
 public:
-    std::string type;
-    Expression() {type="expression";}
+    ElementType type;
+    Expression() {type=EXPRESSION;}
     void display() const override {
         std::cout << "E";
     }
@@ -54,8 +55,8 @@ public:
 class Term : public GrammarElement {
 private:
 public:
-    std::string type;
-    Term() {type="term";}
+    ElementType type;
+    Term() {type=TERM;}
     void display() const override {
         std::cout << "T";
     }
@@ -65,7 +66,7 @@ class Factor : public GrammarElement {
 private:
 public:
     std::string type;
-    Factor() {type="factor";}
+    Factor() {type=FACTOR;}
     void display() const override {
         std::cout << "F";
     }

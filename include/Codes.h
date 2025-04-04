@@ -27,3 +27,11 @@ enum ReductionCode {
     TF_T,
     F_T,
 };
+
+enum ElementType {
+    ID = 0,
+    OPERATOR,
+    EXPRESSION,
+    TERM,
+    FACTOR
+};  
