@@ -1,9 +1,4 @@
 %{
-#include <iostream>
-#include <fstream>
-
-using namespace std;
-
 enum Level {
     PLUS = 5,
     MINUS,
