@@ -26,6 +26,8 @@ public:
             std::cout << "T";
         } else if (type == ElementType::FACTOR) {
             std::cout << "F";
+        } else if (type == ElementType::INV_EXPR) {
+            std::cout << " (?) ";
         }
     }
 

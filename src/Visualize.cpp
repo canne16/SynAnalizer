@@ -14,12 +14,12 @@ void printStack(std::vector<GrammarElement> stack) {
 
 
 void printBuffer(std::queue<GrammarElement> q) {
-    // std::cout << "Buffer:" << std::endl;
+    std::cout << "Buffer:" << std::endl;
 
     while (!q.empty()) {
         q.front().display(); 
         q.pop();
-        // std::cout << " ";
+        std::cout << " ";
     }
 
     std::cout << "$\t|"; // << std::endl;

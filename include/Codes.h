@@ -15,17 +15,19 @@ enum LexerOutput {
     LPAR,
     RPAR,
     NUMBER,
-    VAR
+    VAR,
+    INV_SYM,
 }; 
 
 enum ReductionCode {
-    INV = 0,
+    END = 0,
     ID_F,
     lEl_F,
     ET_E,
     T_E,
     TF_T,
     F_T,
+    ERROR,
 };
 
 enum ElementType {
@@ -33,5 +35,6 @@ enum ElementType {
     OPERATOR,
     EXPRESSION,
     TERM,
-    FACTOR
+    FACTOR,
+    INV_EXPR,
 };  

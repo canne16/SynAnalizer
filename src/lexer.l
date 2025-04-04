@@ -7,14 +7,15 @@ enum Level {
     LPAR,
     RPAR,
     NUMBER,
-    VAR
+    VAR,
+    INV_SYM,
 }; 
 
 %}
 
 %option noyywrap c++
 
-ws      [ \ta-wA-Z\n=_,.?]+
+ws      [a-wA-Z=_,.?#@%^&~`!:;'"\[\]\{\}]+
 
 var     [x-z]
 dig     [0-9]
@@ -32,10 +33,11 @@ number  {dig}|{num}
 ")"         {return RPAR;}
 "$"         {return 0;}
 
-{ws}    
+{ws}        {return INV_SYM;}
 
 {number}    {return NUMBER;}
 
 {var}       {return VAR;}
+
 
 %%

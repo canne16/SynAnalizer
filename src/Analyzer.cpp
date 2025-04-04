@@ -27,8 +27,9 @@ std::queue<GrammarElement> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer) {
         case VAR:
             buffer.emplace(ElementType::ID, lexer->YYText(), idCounter);
             idCounter++;
-        default:
             break;
+        case INV_SYM:
+            buffer.emplace(ElementType::INV_EXPR, lexer->YYText());
         }
         lex_out = lexer->yylex();
     }
@@ -45,16 +46,24 @@ std::vector<GrammarElement> SyntaxAnalyzer<LR0>::process() {
     while (!buffer.empty()) {
 
         ReductionCode code = canReduce();
-        while(code != INV) {
+        while(code != END && code != ERROR) {
             reduce(code);
             code = canReduce();
         }
         
+        if (code == ERROR) {
+            actions.push_back("Error");
+            #ifndef TESTING
+            printRow(stack, buffer, actions.back());
+            #endif
+            return stack;
+        }
+
         shift();
     }
 
     ReductionCode code = canReduce();
-    while(code != INV) {
+    while(code != END && code != ERROR) {
         reduce(code);
         code = canReduce();
     }
@@ -161,7 +170,10 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
 ReductionCode SyntaxAnalyzer<LR0>::canReduce() {
 
     if (stack.empty())
-        return INV;
+        return END;
+
+    if (stack.back().getType() == ElementType::INV_EXPR)
+        return ERROR;
 
     if (stack.back().getType() == ElementType::ID)
         return ID_F;
@@ -209,7 +221,7 @@ ReductionCode SyntaxAnalyzer<LR0>::canReduce() {
             return T_E;
     }   
 
-    return INV;
+    return END;
 }
 
 SyntaxAnalyzer<LR0>::~SyntaxAnalyzer() {
