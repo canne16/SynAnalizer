@@ -4,7 +4,7 @@
 
 SyntaxAnalyzer<LR0>::SyntaxAnalyzer() : idCounter(0) {}
 
-std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer) {
+std::queue<GrammarElement> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer) {
 
     #ifndef TESTING
     std::cout << "Parsing using LR(0) algorithm.\n";
@@ -21,11 +21,11 @@ std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer) {
             case MUL:
             case LPAR:
             case RPAR:
-            buffer.push(new Operator(lexer->YYText()));
+            buffer.emplace(ElementType::OPERATOR, lexer->YYText());
             break;
         case NUMBER:
         case VAR:
-            buffer.push(new Id(idCounter, lexer->YYText()));
+            buffer.emplace(ElementType::ID, lexer->YYText(), idCounter);
             idCounter++;
         default:
             break;
@@ -36,7 +36,7 @@ std::queue<GrammarElement*> SyntaxAnalyzer<LR0>::parse(FlexLexer* lexer) {
     return buffer;
 }
 
-std::vector<GrammarElement*> SyntaxAnalyzer<LR0>::process() {
+std::vector<GrammarElement> SyntaxAnalyzer<LR0>::process() {
     
     #ifndef TESTING
     table_prompt();
@@ -59,7 +59,7 @@ std::vector<GrammarElement*> SyntaxAnalyzer<LR0>::process() {
         code = canReduce();
     }
     
-    if ((stack.size() == 1) && (dynamic_cast<Expression*>(stack[0]) != nullptr))
+    if ((stack.size() == 1) && (stack[0].type != ElementType::EXPRESSION))
         actions.push_back("Accept");
     else
         actions.push_back("Error");
@@ -88,9 +88,8 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
             #ifndef TESTING
             printRow(stack, buffer, actions.back());
             #endif
-            delete stack.back();
             stack.pop_back();
-            stack.push_back(new Factor());
+            stack.push_back(ElementType::FACTOR);
             break;
         
         case lEl_F:
@@ -98,13 +97,10 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
             #ifndef TESTING
             printRow(stack, buffer, actions.back());
             #endif
-            delete stack.back();
             stack.pop_back();
-            delete stack.back();
             stack.pop_back();
-            delete stack.back();
             stack.pop_back();
-            stack.push_back(new Factor());
+            stack.push_back(ElementType::FACTOR);
             break;
 
         case F_T:
@@ -112,13 +108,13 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
             #ifndef TESTING
             printRow(stack, buffer, actions.back());
             #endif
-            delete stack.back();
             stack.pop_back();
-            stack.push_back(new Term());
+            stack.push_back(ElementType::TERM);
             break;
 
         case TF_T:
-            if (dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "*")
+            if ((stack[stack.size() - 2].type == ElementType::OPERATOR) && 
+                (stack[stack.size() - 2].value == "*"))
                 actions.push_back("Reduce T -> T*F");
             else
                 actions.push_back("Reduce T -> T/F");
@@ -126,13 +122,10 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
             printRow(stack, buffer, actions.back());
             #endif
             
-            delete stack.back();
             stack.pop_back();
-            delete stack.back();
             stack.pop_back();
-            delete stack.back();
             stack.pop_back();
-            stack.push_back(new Term());
+            stack.push_back(ElementType::TERM);
             break;
 
         case T_E:
@@ -140,13 +133,13 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
             #ifndef TESTING
             printRow(stack, buffer, actions.back());
             #endif
-            delete stack.back();
             stack.pop_back();
-            stack.push_back(new Expression());
+            stack.push_back(ElementType::EXPRESSION);
             break;
 
         case ET_E:
-            if (dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "+")
+            if ((stack[stack.size() - 2].type == ElementType::OPERATOR) && 
+                (stack[stack.size() - 2].value == "+"))
                 actions.push_back("Reduce E -> E+T");
             else
                 actions.push_back("Reduce E -> E-T");
@@ -154,13 +147,10 @@ void SyntaxAnalyzer<LR0>::reduce(ReductionCode code) {
             printRow(stack, buffer, actions.back());
             #endif
 
-            delete stack.back();
             stack.pop_back();
-            delete stack.back();
             stack.pop_back();
-            delete stack.back();
             stack.pop_back();
-            stack.push_back(new Expression());
+            stack.push_back(ElementType::EXPRESSION);
             break;
 
         default:
@@ -173,25 +163,24 @@ ReductionCode SyntaxAnalyzer<LR0>::canReduce() {
     if (stack.empty())
         return INV;
 
-    if (dynamic_cast<Id*>(stack.back()) != nullptr)
+    if (stack.back().type == ElementType::ID)
         return ID_F;
 
     if (
         stack.size() >= 3 &&
-        dynamic_cast<Operator*>(stack[stack.size() - 3]) != nullptr &&
-        dynamic_cast<Operator*>(stack[stack.size() - 3])->value == "(" &&
-        dynamic_cast<Operator*>(stack[stack.size() - 1]) != nullptr &&
-        dynamic_cast<Operator*>(stack[stack.size() - 1])->value == ")" &&
-        dynamic_cast<Expression*>(stack[stack.size() - 2]) != nullptr
+        stack[stack.size() - 3].type == ElementType::OPERATOR &&
+        stack[stack.size() - 3].value == "(" &&
+        stack[stack.size() - 1].type == ElementType::OPERATOR &&
+        stack[stack.size() - 1].value == ")" &&
+        stack[stack.size() - 2].type == ElementType::EXPRESSION
     )   return lEl_F;
     
     if (
         stack.size() >= 3 &&
-        dynamic_cast<Term*>(stack[stack.size() - 3]) != nullptr &&
-        dynamic_cast<Operator*>(stack[stack.size() - 2]) != nullptr &&
-        (dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "*" || 
-            dynamic_cast<Operator*>(stack[stack.size() - 2])->value == "/") &&
-        dynamic_cast<Factor*>(stack[stack.size() - 1]) != nullptr
+        stack[stack.size() - 3].type == ElementType::TERM &&
+        stack[stack.size() - 2].type == ElementType::OPERATOR &&
+        (stack[stack.size() - 2].value == "*" || stack[stack.size() - 2].value == "/") &&
+         stack[stack.size() - 1].type == ElementType::FACTOR
     )   return TF_T;
     
     if (

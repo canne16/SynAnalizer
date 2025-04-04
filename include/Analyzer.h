@@ -16,15 +16,15 @@ template <>
 class SyntaxAnalyzer<LR0> {
 private:
     int idCounter;
-    std::queue<GrammarElement*> buffer;
-    std::vector<GrammarElement*> stack;
+    std::queue<GrammarElement> buffer;
+    std::vector<GrammarElement> stack;
     std::vector<std::string> actions;
 
 public:
     SyntaxAnalyzer(); 
 
-    std::queue<GrammarElement*> parse(FlexLexer* lexer);
-    std::vector<GrammarElement*> process();
+    std::queue<GrammarElement> parse(FlexLexer* lexer);
+    std::vector<GrammarElement> process();
     void shift();
     void reduce(ReductionCode code);
     ReductionCode canReduce();
